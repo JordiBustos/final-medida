@@ -133,7 +133,7 @@
 \newpage
 
 % --- CUERPO DEL TRABAJO ---
-\section{Introducción y Preliminares}
+\section{Introducción}
 
 En esta sección establecemos la notación y recordamos los conceptos fundamentales necesarios para abordar el Teorema de Radon-Nikodym.
 
@@ -153,7 +153,7 @@ Para una función medible no negativa \(f: X \to [0, \infty]\), la integral resp
     En todo lo que sigue asumimos familiaridad con los conceptos básicos de teoría de la medida: conjuntos medibles, funciones medibles, integrales de Lebesgue, y convergencia en casi todo punto.
 \end{observacion}
 
-\subsection{Cargas y medidas con signo}
+\section{Cargas y medidas con signo}
 
 \begin{definicion}[Carga]
     Si \( \X \) es una \( \sigma \)-álgebra sobre un conjunto \( X \), entonces una función \( \nu \) a valores reales definida sobre \( \X \)
@@ -185,14 +185,14 @@ Para avanzar hacia el teorema principal, es necesario extender el concepto de me
 \begin{definicion}
     Una \textbf{medida con signo} (o medida signada) en el espacio medible \((X, \X)\) es una función \(\nu: \X \to \R \) tal que:
     \begin{enumerate}[label = (\roman*)]
-        \item \(\nu(\emptyset) = 0\),
+        \item \(\nu(\varnothing) = 0\),
         \item Si \({\{ A_n \}}_{n=1}^{\infty}\) es una sucesión de conjuntos disjuntos en \(\X \), entonces:
               \[\nu\left(\bigcup_{n=1}^{\infty} A_n\right) = \sum_{n=1}^{\infty} \nu(A_n),\]
               donde la serie converge absolutamente o ambos lados son infinitos del mismo signo.
     \end{enumerate}
 \end{definicion}
 
-\subsection{Teorema de Descomposición de Hahn}
+\section{Teorema de Descomposición de Hahn}
 
 \begin{teorema}[Descomposición de Hahn]
     Sea \(\nu \) una medida con signo en el espacio medible \((X, \X)\). Entonces existen dos conjuntos medibles \(P\) y \(N\) en \(\X \) tales que:
@@ -208,7 +208,7 @@ Para avanzar hacia el teorema principal, es necesario extender el concepto de me
 \begin{proof}
     La clase \(\mathcal{P}\) de todos los conjuntos positivos con respecto a \(\nu \) es no vacía, pues \(\varnothing \in \mathcal{P}\). Definamos
     \(\alpha = \sup \{ \nu(A) : A \in \mathcal{P} \} \). Sea \({(A_n)}_{n \geq 1}\) una sucesión de conjuntos en \(\mathcal{P}\) tal que
-    \(\lim_{n \to \infty} \nu(A_n) = \alpha \). Entonces definimos 
+    \(\lim_{n \to \infty} \nu(A_n) = \alpha \). Entonces definimos
     \[
         P = \bigcup_{n \geq 1} A_n
     \]
@@ -219,15 +219,15 @@ Para avanzar hacia el teorema principal, es necesario extender el concepto de me
     ya que \(E \cap A_n \subseteq A_n\). Además, resulta que \(\alpha = \lim_{n \to \infty} \nu(A_n) = \nu(P) < +\infty \).
 
     Resta ver que \(N = X \setminus P\) es un conjunto negativo para \(\nu \). Supongamos por absurdo que no lo es; entonces existe \(E \in \X \) tal que \(E \subseteq N\) y \(\nu(E) > 0\). El conjunto \(E\) no puede ser positivo, pues en ese caso \(P \cup E\) sería un conjunto positivo con \(\nu(P \cup E) = \nu(P) + \nu(E) > \alpha \), lo cual contradice que \(\alpha \) es el supremo de las medidas de conjuntos positivos.
-    
-    Luego, \(E\) debe contener algún conjunto con medida negativa. Sea \(n_1\) el primer número natural tal que \(E\) contiene un conjunto medible \(E_1\) que verifica \(\nu(E_1) \leq -1/n_1\). Entonces:
+
+    Luego, \(E\) debe contener algún conjunto con carga negativa. Sea \(n_1\) el primer número natural tal que \(E\) contiene un conjunto medible \(E_1\) que verifica \(\nu(E_1) \leq -1/n_1\). Entonces:
     \[
         \nu(E \setminus E_1) = \nu(E) - \nu(E_1) > \nu(E) > 0
     \]
     Sin embargo, \(E \setminus E_1\) tampoco puede ser positivo, pues \(P \cup (E \setminus E_1)\) superaría el supremo \(\alpha \).
-    
+
     Aplicando el mismo razonamiento, \(E \setminus E_1\) contiene un conjunto con carga negativa. Sea \(n_2\) el primer natural tal que \(E \setminus E_1\) contiene un conjunto \(E_2 \in \X \) con \(\nu(E_2) \leq -1/n_2\). Repitiendo este argumento de forma inductiva, obtenemos una sucesión de conjuntos disjuntos \({(E_k)}_{k \geq 1}\) contenidos en \(E\) y una sucesión de naturales \(n_k\) tales que \(\nu(E_k) \leq -1/n_k\).
-    
+
     Definamos
     \[
         F = \bigcup_{k \geq 1} E_k
@@ -237,23 +237,60 @@ Para avanzar hacia el teorema principal, es necesario extender el concepto de me
         \nu(F) = \sum_{k \geq 1} \nu(E_k) \leq - \sum_{k \geq 1} \frac{1}{n_k}
     \]
     Como la suma converge, necesariamente \(-1/n_k \to 0\), lo que implica que \(n_k \to \infty \).
-    
+
     Ahora, supongamos que existe un subconjunto medible \(G \subseteq E \setminus F\) tal que \(\nu(G) < 0\). Existirá entonces algún entero \(m\) tal que \(\nu(G) \leq -1/m\). Como \(n_k \to \infty \), para \(k\) suficientemente grande tendremos que \(n_k - 1 > m\), y por lo tanto:
     \[
         \nu(G) \leq -\frac{1}{n_k - 1}
     \]
     Pero \(G \subseteq E \setminus F \subseteq E \setminus (E_1 \cup \ldots \cup E_{k-1})\). Esto significa que en el paso \(k\) existía un conjunto (precisamente \(G\)) con medida menor o igual a \(-1/(n_k - 1)\), lo cual contradice la elección de \(n_k\) como el \textbf{primer} natural que cumplía dicha cota.
-    
+
     En consecuencia, ningún subconjunto de \(E \setminus F\) puede tener medida negativa. Esto prueba que \(E \setminus F\) es un conjunto positivo. Dado que:
     \[
         \nu(E \setminus F) = \nu(E) - \nu(F) > 0
     \]
-    (pues \(\nu(E) > 0\) y \(\nu(F) \leq 0\)), deducimos que \(P \cup (E \setminus F)\) es un conjunto positivo con medida estrictamente mayor que \(\alpha \), llegando a nuestra contradicción final. 
-    
+    (pues \(\nu(E) > 0\) y \(\nu(F) \leq 0\)), deducimos que \(P \cup (E \setminus F)\) es un conjunto positivo con medida estrictamente mayor que \(\alpha \), llegando a nuestra contradicción final.
+
     Por lo tanto, la suposición original era falsa: \(N = X \setminus P\) es efectivamente un conjunto negativo con respecto a \(\nu \), completando la demostración.
+    A la descomposición \( P \), \( N \) la llamamos \textbf{descomposición de Hahn} de \( X \) con respecto a \( \nu \).
 \end{proof}
 
-\subsection{Teorema de Descomposición de Jordan}
+\begin{lemma}
+    Si \( P_1 \), \( N_1 \) y \( P_2 \), \( N_2 \) son descomposiciones de Hahn de \( X \) con respecto a \( \nu \) y \( E \in \X \) entonces \[
+        \nu(E \cap P_1) = \nu(E \cap P_2) \quad \text{y} \quad \nu(E \cap N_1) = \nu(E \cap N_2).
+    \]
+\end{lemma}
+\begin{proof}
+    Dado que \( E \cap (P_1 \setminus P_2) \subseteq P_1 \) y \( E \cap (P_1 \setminus P_2) \subseteq N_2 \), se tiene que
+    \( \nu(E \cap (P_1 \setminus P_2)) \geq 0 \) y \( \nu(E \cap (P_1 \setminus P_2)) \leq 0 \implies \nu(E \cap (P_1 \setminus P_2)) = 0 \).
+
+    Notemos que \( E \cap P_1 = (E \cap P_1 \cap P_2) \cup (E \cap P_1 \cap P_2^c) \). Entonces:
+    \[
+        \nu(E \cap P_1) = \nu(E \cap P_1 \cap P_2) + \nu(E \cap P_1 \cap P_2^c) = \nu(E \cap P_1 \cap P_2) + 0 = \nu(E \cap P_1 \cap P_2)
+    \]
+    Análogamente, \[
+        \nu(E \cap P_2) = \nu(E \cap P_1 \cap P_2)
+    \]
+    y entonces \( \nu(E \cap P_1) = \nu(E \cap P_2) \). De manera similar, se prueba que \( \nu(E \cap N_1) = \nu(E \cap N_2) \).
+\end{proof}
+
+\begin{definicion}
+    Sea \( \nu \) una carga en \( \X \) y \( P \), \( N \) la descomposición de Hahn de \( X \) con respecto a \( \nu \).
+    La \textbf{variación positiva y negativa} de \( \nu \) son las medidas finitas \( \nu^+ \) y \( \nu^- \) definidas para \( E \in \X \) por:
+    \[
+        \nu^+(E) = \nu(E \cap P) \quad \text{y} \quad \nu^-(E) = -\nu(E \cap N)
+    \]
+\end{definicion}
+
+\begin{definicion}[Variación total]
+    La \textbf{variación total} de \( \nu \) es la medida finita \( |\nu| \) definida para \( E \in \X \) por:
+    \[
+        |\nu|(E) = \nu^+(E) + \nu^-(E)
+    \]
+\end{definicion}
+
+Por el lema anterior se deduce que \( \nu^+ \) y \( \nu^- \) no dependen de la elección de la descomposición de Hahn. Además, es claro que \( \nu = \nu^+ - \nu^- \).
+
+\section{Teorema de Descomposición de Jordan}
 
 \begin{teorema}[Descomposición de Jordan]
     Toda medida con signo \(\nu \) en el espacio medible \((X, \X)\) puede expresarse de manera única como la diferencia de dos medidas positivas disjuntas:
