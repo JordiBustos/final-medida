@@ -138,6 +138,10 @@ En esta sección establecemos la notación y recordamos los conceptos fundamenta
     Sea \(X\) un conjunto no vacío. Una \(\sigma \)-álgebra \(\X \) sobre \(X\) es una colección de subconjuntos de \(X\) que incluye al conjunto vacío, es cerrada bajo complementos y cerrada bajo uniones contables.
 \end{definicion}
 
+\begin{definicion}[Espacio medible]
+    Un \textbf{espacio medible} es un par \((X, \X)\) donde \(X\) es un conjunto no vacío y \(\X \) es una \( \sigma \)-álgebra sobre \(X\).
+\end{definicion}
+
 \begin{definicion}[Medida]
     Una \textbf{medida} en el espacio medible \((X, \X)\) es una función \(\mu: \X \to [0, \infty]\) tal que:
     \begin{enumerate}[label = (\roman*)]
@@ -175,12 +179,29 @@ Para una función medible no negativa \(f: X \to [0, \infty]\), la integral resp
 Es claro que la suma y diferencia de cargas es una carga. Es más, cualquier combinación lineal de cargas es una carga.
 
 \begin{lemma}
-    Si \( {(E_n)}_{n \geq 1} \) y \( {(F_n)}_{n \geq 1} \) son sucesiones crecientes y decrecientes respectivamente de conjuntos en \( \X \),
-    entonces \begin{align*}
+    Sea \( \nu \) una carga en \( X \). Si \( {(E_n)}_{n \geq 1} \) y \( {(F_n)}_{n \geq 1} \) son sucesiones crecientes y decrecientes respectivamente de conjuntos en \( \X \) (con \( |\nu(F_1)| < \infty \)), entonces
+    \begin{align*}
         \nu\left(\bigcup_{n=1}^\infty E_n\right) & = \lim_{n \to \infty} \nu(E_n) \\
         \nu\left(\bigcap_{n=1}^\infty F_n\right) & = \lim_{n \to \infty} \nu(F_n)
     \end{align*}
 \end{lemma}
+
+\begin{proof}
+    Para la sucesión creciente, definimos \( A_1 = E_1 \) y \( A_n = E_n \setminus E_{n-1} \) para \( n \geq 2 \). Los conjuntos \( A_n \) son disjuntos, \( \bigcup_{n=1}^k A_n = E_k \) y \( \bigcup_{n=1}^\infty A_n = \bigcup_{n=1}^\infty E_n \). Por la aditividad numerable de \( \nu \):
+    \[
+        \nu\left(\bigcup_{n=1}^\infty E_n\right) = \sum_{n=1}^\infty \nu(A_n) = \lim_{k \to \infty} \sum_{n=1}^k \nu(A_n) = \lim_{k \to \infty} \nu(E_k).
+    \]
+
+    Para la sucesión decreciente, definimos \( B_n = F_1 \setminus F_n \). Entonces \( (B_n) \) es creciente y \( \bigcup B_n = F_1 \setminus (\bigcap F_n) \). Por la primera parte:
+    \[
+        \nu\left(F_1 \setminus \bigcap F_n\right) = \lim_{n \to \infty} \nu(F_1 \setminus F_n).
+    \]
+    Dado que \( |\nu(F_1)| < \infty \), aplicamos la propiedad de la resta \( \nu(F_1 \setminus A) = \nu(F_1) - \nu(A) \):
+    \[
+        \nu(F_1) - \nu\left(\bigcap F_n\right) = \nu(F_1) - \lim_{n \to \infty} \nu(F_n).
+    \]
+    Cancelando \( \nu(F_1) \), se obtiene el resultado.
+\end{proof}
 
 \begin{definicion}
     Si \( \nu \) es una carga en \( \X \) entonces un conjunto \( P \in \X \) es un \textbf{conjunto positivo} con respecto a \( \nu \)
@@ -189,9 +210,34 @@ Es claro que la suma y diferencia de cargas es una carga. Es más, cualquier com
     \( \nu(E \cap M) = 0 \) para todo \( E \in \X \).
 \end{definicion}
 
-Se puede ver que un subconjunto medible de un conjunto positivo es positivo y que la unión de dos conjuntos positivos es positivo.
+\clearpage
 
-Para avanzar hacia el teorema principal, es necesario extender el concepto de medida a valores reales en lugar de solo valores positivos.
+\begin{proposicion}
+    Si \( P \) es un conjunto positivo y \( E \) es un subconjunto medible de \( P \), entonces \( E \) es positivo.
+\end{proposicion}
+\begin{proof}
+    Sabemos que \( \nu(A \cap P) \geq 0 \) para todo \( A \in \X \). Notemos que \( A \cap E \in \X \) y la propiedad anterior vale en particular para \( A \cap E \). Entonces: \[
+        \nu((A \cap E) \cap P) = \nu(A \cap E) \geq 0
+    \]
+    para todo \( A \in \X \), lo que implica que \( E \) es un conjunto positivo.
+\end{proof}
+
+\begin{proposicion}
+    Si \( P_1 \) y \( P_2 \) son conjuntos positivos, entonces \( P_1 \cup P_2 \) es un conjunto positivo.
+\end{proposicion}
+\begin{proof}
+    Es claro que:
+    \[
+        P_1 \cup P_2 = P_1 \cup (P_2 \setminus P_1)
+    \]
+    Luego, para todo \( E \in \X \):\begin{align*}
+        \nu(E \cap (P_1 \cup P_2)) & = \nu(E \cap (P_1 \cup (P_2 \setminus P_1)))          \\
+                                   & = \nu((E \cap P_1) \cup (E \cap (P_2 \setminus P_1))) \\
+                                   & = \nu(E \cap P_1) + \nu(E \cap (P_2 \setminus P_1))
+    \end{align*}
+    Donde \( \nu(E \cap P_1) \geq 0 \) por hipotesis. Veamos que ocurre con el segundo término, \( P_2 \setminus P_1 \subseteq P_2 \) y como \( P_2 \setminus P_1 \in \X \), se tiene que
+    \( P_2 \setminus P_1 \) es un conjunto positivo por la proposición anterior. Por lo tanto, \( \nu(E \cap (P_2 \setminus P_1)) \geq 0 \). En consecuencia, \( \nu(E \cap (P_1 \cup P_2)) \geq 0 \) para todo \( E \in \X \), lo que implica que \( P_1 \cup P_2 \) es un conjunto positivo.
+\end{proof}
 
 \begin{definicion}
     Una \textbf{medida con signo} (o medida signada) en el espacio medible \((X, \X)\) es una función \(\nu: \X \to \R \) tal que:
