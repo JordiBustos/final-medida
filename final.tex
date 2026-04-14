@@ -12,6 +12,8 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
 
 % --- Configuración de Página ---
 \geometry{left=2.8cm, right=2.8cm, top=3.2cm, bottom=3.2cm, headheight=14.5pt}
@@ -31,6 +33,7 @@
 \definecolor{darkblue}{RGB}{0, 51, 102}
 \definecolor{lightgray}{RGB}{240, 240, 240}
 \definecolor{mediumgray}{RGB}{100, 100, 100}
+\definecolor{accentblue}{RGB}{0, 102, 204}
 
 % --- Encabezados y Pies de Página ---
 \pagestyle{fancy}
@@ -51,7 +54,7 @@
     {\textbf{\color{darkblue}}}%
     {:}%
     {0.5em}%
-    {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}%
+    {\textbf{\thmname{#1}\thmnumber{ #2}\thmnote{ (\textcolor{accentblue}{\textbf{#3}})}}}%
 
 \theoremstyle{profesional}
 \newtheorem{teorema}{Teorema}[section]
@@ -59,11 +62,31 @@
 \newtheorem{proposicion}[teorema]{Proposición}
 \newtheorem{corolario}[teorema]{Corolario}
 
-\theoremstyle{definition}
+% --- Estilo para definiciones (verde) ---
+\newtheoremstyle{definicion-style}%
+    {0.5em}%
+    {0.5em}%
+    {}%
+    {0pt}%
+    {\textbf{\color{accentblue}}}%
+    {:}%
+    {0.5em}%
+    {\textbf{\thmname{#1}\thmnumber{ #2}\thmnote{ (\textcolor{accentblue}{\textbf{#3}})}}}%
+
+\theoremstyle{definicion-style}
 \newtheorem{definicion}[teorema]{Definición}
 \newtheorem{ejemplo}[teorema]{Ejemplo}
 
-\theoremstyle{remark}
+% --- Estilo para observaciones (púrpura) ---
+\newtheoremstyle{observacion-style}%
+    {0.5em}%
+    {0.5em}%
+    {\color{mediumgray}\itshape}%
+    {0pt}%
+    {\textbf{\color{accentblue}}}%
+    {:}%
+    {0.5em}%
+    {\textbf{\thmname{#1}\thmnumber{ #2}\thmnote{ (\textcolor{accentblue}{\textbf{#3}})}}}%
 \newtheorem{observacion}[teorema]{Observación}
 
 % --- Macros útiles ---
@@ -75,6 +98,38 @@
 \newcommand{\E}{\mathbb{E}}
 
 \newcommand{\X}{\mathfrak{X}}
+
+% --- Configuración de tcolorbox para teoremas ---
+\tcbset{
+    colback=white,
+    colframe=darkblue,
+    boxrule=0.5pt,
+    arc=2pt,
+    left=3pt,
+    right=3pt,
+    top=3pt,
+    bottom=3pt
+}
+
+% --- Formato de títulos de secciones ---
+\titleformat{\section}
+    {\Large\bfseries\color{darkblue}}
+    {\thesection.}
+    {0.5em}
+    {}
+    [\vspace{0.3em}\noindent\textcolor{darkblue}{\rule{\textwidth}{1.5pt}}]
+
+\titleformat{\subsection}
+    {\large\bfseries\color{accentblue}}
+    {\thesubsection.}
+    {0.5em}
+    {}
+
+\titleformat{\subsubsection}
+    {\normalsize\bfseries\color{accentblue}}
+    {\thesubsubsection.}
+    {0.5em}
+    {}
 
 \begin{document}
 
@@ -204,13 +259,53 @@ Es claro que la suma y diferencia de cargas es una carga. Es más, cualquier com
 \end{proof}
 
 \begin{definicion}
+    Notaremos \( M^+ \) al conjunto de todas las funciones \( \X \)-medibles de \( X \) en la recta real extendida que son no negativas.
+    La colección \( M \) está formada por todas las funciones \( \X \)-medibles de \( X \) en la recta real extendida. Finalmente, \( L \) es el conjunto de todas las funciones \( f \in M \) tales que \( f^+ \) y \( f^- \) pertenecen a \( M^+ \).
+\end{definicion}
+
+\begin{teorema}[Teorema de la convergencia monótona]
+    Si \( {(f_n)}_{n \geq 1} \) es una sucesión monotona creciente de funciones en \( M^+(X, \X) \) que convergen a \( f \) entonces \[
+        \int f \, d\mu = \lim_{n \to \infty} \int f_n \, d\mu
+    \]
+\end{teorema}
+
+\begin{proposicion}
+    Si \( f \in M^+ \) y \( \nu : \X \to [0, \infty] \) dada por \( \nu(E) = \int_E f \, d\mu \) entonces \( \nu \) es una medida en \( \X \).
+\end{proposicion}
+\begin{proof}
+    Dado que \( f \geq 0 \) se sigue que \( \nu(E) \geq 0 \). Si \( E = \varnothing \), entonces \( f \chi_E \equiv 0 \) y, por lo tanto, \( \nu(\varnothing) = 0 \).
+    Para ver que \( \nu \) es contable aditiva, sea \( {(E_n)}_{n \geq 1} \) una sucesión de conjuntos disjuntos en \( \X \) con unión \( E \) y \( f_n = \sum_{k = 1}^n f \chi_{E_k} \). Entonces:
+    \[
+        \int f_n \, d\mu = \sum_{k = 1}^n \int f \chi_{E_k} \, d \mu = \sum_{k = 1}^n \nu(E_k)
+    \]
+    como \( f_n \nearrow f \chi_E \), por el teorema de la convergencia monótona vale que: \[
+        \nu(E) = \int f \chi_E \, d \mu = \lim \int f_n \, d \mu = \sum_{k \geq 1} \nu(E_k)
+    \]
+\end{proof}
+
+\begin{lemma}
+    Si \( f \in L \) y \( \nu : \X \to \R \) dada por \( \nu(E) = \int_E f \, d\mu \) entonces \( \nu \) es una carga en \( \X \).
+\end{lemma}
+\begin{proof}
+    En efecto, dado que \( f^+ \) y \( f^- \) pertenecen a \( M^+ \) las funciones \begin{align*}
+        \nu^+(E) & = \int_E f^+ \, d\mu \\
+        \nu^-(E) & = \int_E f^- \, d\mu
+    \end{align*}
+    son medidas en \( \X \) por la proposición anterior. Por lo tanto, son finitas pues \( f \in L \). Dado que \( \nu = \nu^+ - \nu^- \), se concluye que \( \nu \) es una carga en \( \X \).
+\end{proof}
+
+La función \( \nu \) es frecuentemente llamada la integral indefinida de \( f \) respecto de \( \mu \). Dado que \( \nu \) es una carga, si
+\( {(E_n)}_{n \geq 1} \) es una sucesión de conjuntos disjuntos en \( \X \) con unión \( E \) entonces: \[
+    \nu(E) = \int_E f \, d\mu = \sum_{n \geq 1} \int_{E_n} f \, d\mu = \sum_{n \geq 1} \nu(E_n)
+\]
+Nos referimos a esta relación diciendo que la integral indefinida de una función en \( L \) es aditiva contable.
+
+\begin{definicion}
     Si \( \nu \) es una carga en \( \X \) entonces un conjunto \( P \in \X \) es un \textbf{conjunto positivo} con respecto a \( \nu \)
     si \( \nu(E \cap P) \geq 0 \) para todo \( E \in \X \). De manera análoga, \( N \) es un \textbf{conjunto negativo} con respecto a \( \nu \) si
     \( \nu(E \cap N) \leq 0 \) para todo \( E \in \X \). Un conjunto \( M \in \X \) es un \textbf{conjunto nulo} con respecto a \( \nu \) si
     \( \nu(E \cap M) = 0 \) para todo \( E \in \X \).
 \end{definicion}
-
-\clearpage
 
 \begin{proposicion}
     Si \( P \) es un conjunto positivo y \( E \) es un subconjunto medible de \( P \), entonces \( E \) es positivo.
@@ -259,7 +354,7 @@ Es claro que la suma y diferencia de cargas es una carga. Es más, cualquier com
         \item \(P\) es un conjunto positivo con respecto a \(\nu \),
         \item \(N\) es un conjunto negativo con respecto a \(\nu \).
     \end{enumerate}
-    Esta descomposición es única salvo por conjuntos de medida nula.
+    Esta descomposición no necesariamente es única.
 \end{teorema}
 
 \begin{proof}
@@ -350,24 +445,43 @@ Por el lema anterior se deduce que \( \nu^+ \) y \( \nu^- \) no dependen de la e
 \section{Teorema de Descomposición de Jordan}
 
 \begin{teorema}[Descomposición de Jordan]
-    Toda medida con signo \(\nu \) en el espacio medible \((X, \X)\) puede expresarse de manera única como la diferencia de dos medidas positivas disjuntas:
-    \[\nu = \nu^+ - \nu^-,\]
-    donde \(\nu^+\) y \(\nu^-\) son mutuamente singulares.
-
-    Las medidas \(\nu^+\) y \(\nu^-\) se denominan \textbf{variación positiva} y \textbf{variación negativa} de \(\nu \), respectivamente.
+    Si \( \nu \) es una carga en \( \X \), entonces existen dos medidas finitas en \( \X \) tal que \( \nu \) es la diferencia de ellas. En particular,
+    \( \nu = \nu^+ - \nu^- \). Además, si \( \nu = \mu_1 - \mu_2 \) con \( \mu_1 \) y \( \mu_2 \) medidas finitas, entonces \( \mu_1(E) \geq \nu^+(E) \) y \( \mu_2(E) \geq \nu^-(E) \) para todo \( E \in \X \).
 \end{teorema}
+\begin{proof}
+    La representación \( \nu = \nu^+ - \nu^- \) ya fue establecida en la sección anterior. Dado que \( \mu_1 \) y \( \mu_2 \) son no negativas, se tiene que:
+    \[
+        \nu^+(E) = \nu(E \cap P) = \mu_1(E \cap P) - \mu_2(E \cap P) \leq \mu_1(E \cap P) \leq \mu_1(E)
+    \]
+    Análogamente, \( \nu^-(E) \leq \mu_2(E) \quad \forall E \in \X \).
+\end{proof}
 
-\begin{definicion}
-    La \textbf{variación total} de una medida con signo \(\nu \) se define como:
-    \[|\nu| = \nu^+ + \nu^-.\]
-\end{definicion}
+Vimos previamente que si \( f \) es integrable con respecto a una medida \( \mu \) en \( \X \) y que si \( \nu \) está definida para \( E \in \X \) por:
+\[
+    \nu(E) = \int_E f \, d\mu
+\]
+para todo \( E \in \X \). Entonces \( \nu \) es una carga en \( \X \). Ahora identificaremos la variación positiva y negativa de \( \nu \).
+
+\begin{teorema}
+    Si \( f \in L(X, \X, \mu) \) y \( \nu \) como antes, entonces \( \nu^+ \), \( \nu^- \) y \( |\nu| \) son las medidas dadas por:\begin{align*}
+        \nu^+(E) & = \int_E f^+ \, d\mu \\
+        \nu^-(E) & = \int_E f^- \, d\mu \\
+        |\nu|(E) & = \int_E |f| \, d\mu
+    \end{align*}
+    para todo \( E \in \X \).
+\end{teorema}
+\begin{proof}
+    En efecto, dado \( P_f = \{ x \in X : f(x) \geq 0 \} \) y \( N_f = \{ x \in X : f(x) < 0 \} \). Entonces \( X = P_f \cup N_f \) y \( P_f \cap N_f = \varnothing \).
+    Si \( E \in \X \) es claro que \( \nu(E \cap P_f) \geq 0 \) y \( \nu(E \cap N_f) \leq 0 \), lo que implica que \( P_f \) es un conjunto positivo y \( N_f \) es un conjunto negativo con respecto a \( \nu \) y son la descomposición de Hahn de \( \nu \).
+    Por lo tanto, \( \nu^+(E) = \nu(E \cap P_f) = \int_{E \cap P_f} f \, d\mu = \int_E f^+ \, d\mu \) y \( \nu^-(E) = -\nu(E \cap N_f) = -\int_{E \cap N_f} f \, d\mu = \int_E f^- \, d\mu \). Finalmente, \( |\nu|(E) = \nu^+(E) + \nu^-(E) = \int_E f^+ + f^- \, d\mu = \int_E |f| \, d\mu \).
+\end{proof}
 
 \section{Continuidad Absoluta}
 
 Esta sección introduce la relación fundamental entre dos medidas que es central para el Teorema de Radon-Nikodym.
 
 \begin{definicion}
-    Sea \((X, \X, \mu)\) un espacio de medida y \(\nu \) una medida con signo en \((X, \M)\). Se dice que \(\nu \) es \textbf{absolutamente continua} respecto de \(\mu \), lo cual se denota por \(\nu \ll \mu \), si:
+    Sea \((X, \X, \mu)\) un espacio de medida y \(\nu \) una medida con signo en \((X,  \X)\). Se dice que \(\nu \) es \textbf{absolutamente continua} respecto de \(\mu \), lo cual se denota por \(\nu \ll \mu \), si:
     \[\text{Para todo } A \in \X, \quad \mu(A) = 0 \implies \nu(A) = 0.\]
 \end{definicion}
 
@@ -384,9 +498,9 @@ Esta sección introduce la relación fundamental entre dos medidas que es centra
 Este es el resultado central de toda la exposición. El Teorema de Radon-Nikodym es un pilar fundamental en análisis funcional y teoría de la medida, con aplicaciones profundas en probabilidad, análisis armónico y ecuaciones diferenciales parciales.
 
 \begin{teorema}[Radon-Nikodym]
-    Sea \((X, \X, \mu)\) un espacio de medida \(\sigma \)-finito, y sea \(\nu \) una medida con signo \(\sigma \)-finita en \((X, \M)\). Si \(\nu \ll \mu \), entonces existe una única función medible \(f: X \to \R\) (única en casi todo punto respecto de \(\mu \)) tal que:
+    Sea \((X, \X, \mu)\) un espacio de medida \(\sigma \)-finito, y sea \(\nu \) una medida con signo \(\sigma \)-finita en \((X,  \X)\). Si \(\nu \ll \mu \), entonces existe una única función medible \(f: X \to \R\) (única en casi todo punto respecto de \(\mu \)) tal que:
     \[
-        \nu(E) = \int_E f \, d\mu \quad \text{para todo } E \in \M.
+        \nu(E) = \int_E f \, d\mu \quad \text{para todo } E \in \X.
     \]
     Esta función \(f\) se llama la \textbf{derivada de Radon-Nikodym} de \(\nu \) respecto de \(\mu \) y se denota por \(f = \frac{d\nu}{d\mu}\).
 \end{teorema}
