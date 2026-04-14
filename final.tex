@@ -137,6 +137,20 @@
 
 En esta sección establecemos la notación y recordamos los conceptos fundamentales necesarios para abordar el Teorema de Radon-Nikodym.
 
+\begin{definicion}[\( \sigma \)-álgebra]
+    Sea \(X\) un conjunto no vacío. Una \(\sigma \)-álgebra \(\X \) sobre \(X\) es una colección de subconjuntos de \(X\) que incluye al conjunto vacío, es cerrada bajo complementos y cerrada bajo uniones contables.
+\end{definicion}
+
+\begin{definicion}[Medida]
+    Una \textbf{medida} en el espacio medible \((X, \X)\) es una función \(\mu: \X \to [0, \infty]\) tal que:
+    \begin{enumerate}[label = (\roman*)]
+        \item \(\mu(\varnothing) = 0\),
+        \item Si \({\{ A_n \}}_{n=1}^{\infty}\) es una sucesión de conjuntos disjuntos en \(\X \), entonces:
+              \[\mu\left(\bigcup_{n=1}^{\infty} A_n\right) = \sum_{n=1}^{\infty} \mu(A_n),\]
+              donde la serie converge absolutamente o ambos lados son infinitos del mismo signo.
+    \end{enumerate}
+\end{definicion}
+
 Un espacio de medida se denota como \( (X, \X, \mu) \), donde:
 \begin{itemize}[leftmargin=2em]
     \item \(X\) es un conjunto no vacío (el espacio subyacente),
@@ -146,17 +160,17 @@ Un espacio de medida se denota como \( (X, \X, \mu) \), donde:
 
 Para una función medible no negativa \(f: X \to [0, \infty]\), la integral respecto a la medida \(\mu \) se denota mediante la notación estándar de Lebesgue:
 \[
-    \int_X f \, d\mu
+    \int_X f \, d\mu = \sup \left \{ \int_X \varphi \, d\mu : 0 \leq \varphi \leq f, s \text{ es una función simple} \right \}.
 \]
 
 \begin{observacion}
-    En todo lo que sigue asumimos familiaridad con los conceptos básicos de teoría de la medida: conjuntos medibles, funciones medibles, integrales de Lebesgue, y convergencia en casi todo punto.
+    En todo lo que sigue asumimos familiaridad con los conceptos básicos de teoría de la medida: conjuntos medibles, funciones medibles, integrales de Lebesgue, y convergencia \( \mu \)-c.t.p.
 \end{observacion}
 
 \section{Cargas y medidas con signo}
 
 \begin{definicion}[Carga]
-    Si \( \X \) es una \( \sigma \)-álgebra sobre un conjunto \( X \), entonces una función \( \nu \) a valores reales definida sobre \( \X \)
+    Si \( \X \) es una \( \sigma \)-álgebra sobre un conjunto \( X \), entonces una función \( \nu \) a valores reales extendidos definida sobre \( \X \)
     se llama \textbf{carga} si \( \nu(\varnothing) = 0 \) y \( \nu \) es contable aditiva en el sentido de que si \( {(E_n)}_{n \geq 1} \)
     es una sucesión de conjuntos disjuntos en \( \X \) entonces \( \nu\left(\bigcup_{n=1}^\infty E_n\right) = \sum_{n=1}^\infty \nu(E_n) \).
 \end{definicion}
