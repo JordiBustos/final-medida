@@ -1,0 +1,347 @@
+\documentclass[12pt,a4paper]{article}
+
+% --- Paquetes Esenciales ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+
+% --- Configuración de Página ---
+\geometry{left=2.8cm, right=2.8cm, top=3.2cm, bottom=3.2cm, headheight=14.5pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8em plus 0.4em minus 0.2em}
+
+% --- Configuración de Hipervínculos ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkblue,
+    urlcolor=darkblue,
+    citecolor=darkblue,
+    bookmarksnumbered=true
+}
+
+% --- Colores Profesionales ---
+\definecolor{darkblue}{RGB}{0, 51, 102}
+\definecolor{lightgray}{RGB}{240, 240, 240}
+\definecolor{mediumgray}{RGB}{100, 100, 100}
+
+% --- Encabezados y Pies de Página ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{darkblue}{\textbf{Teorema de Radon-Nikodym}}}
+\fancyhead[R]{\textcolor{mediumgray}{Medida e Integración}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\color{darkblue}\hrule width\headwidth height\headrulewidth \kern-\headrulewidth}
+\renewcommand{\footrulewidth}{0pt}
+
+% --- Definición de Entornos Matemáticos con Estilo ---
+\newtheoremstyle{profesional}%
+    {0.5em}%
+    {0.5em}%
+    {}%
+    {0pt}%
+    {\textbf{\color{darkblue}}}%
+    {:}%
+    {0.5em}%
+    {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}%
+
+\theoremstyle{profesional}
+\newtheorem{teorema}{Teorema}[section]
+\newtheorem{lemma}[teorema]{Lema}
+\newtheorem{proposicion}[teorema]{Proposición}
+\newtheorem{corolario}[teorema]{Corolario}
+
+\theoremstyle{definition}
+\newtheorem{definicion}[teorema]{Definición}
+\newtheorem{ejemplo}[teorema]{Ejemplo}
+
+\theoremstyle{remark}
+\newtheorem{observacion}[teorema]{Observación}
+
+% --- Macros útiles ---
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\M}{\X}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\E}{\mathbb{E}}
+
+\newcommand{\X}{\mathfrak{X}}
+
+\begin{document}
+
+% --- PORTADA PROFESIONAL ---
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{1cm}
+
+    \textcolor{darkblue}{\rule{\linewidth}{2pt}}
+
+    \vspace{0.5cm}
+    {\large \textbf{UNIVERSIDAD NACIONAL DE LA PLATA}}\\
+    {\normalsize Facultad de Ciencias Exactas}\\
+    {\normalsize Departamento de Matemática}\\
+
+    \vspace{0.5cm}
+    \textcolor{darkblue}{\rule{\linewidth}{2pt}}
+
+    \vspace{2.5cm}
+
+    {\Huge \textbf{\textcolor{darkblue}{Teorema de Radon-Nikodym}}}\\
+
+    \vspace{0.5cm}
+    {\large Una Introducción Rigurosa a la Derivada de Medidas}
+
+    \vspace{3cm}
+
+    {\large \textbf{Examen Final}}\\
+    {\normalsize Medida e Integración}
+
+    \vspace{2.5cm}
+
+    {\normalsize
+        \begin{tabular}{ll}
+            \textbf{Autor:}   & Jordi Bustos               \\
+            \textbf{Fecha:}   & \today                     \\
+            \textbf{Carrera:} & Licenciatura en Matemática
+        \end{tabular}
+    }
+
+    \vfill
+
+    {\footnotesize \textcolor{mediumgray}{%
+            Este documento presenta un desarrollo riguroso del Teorema de Radon-Nikodym,\\
+            uno de los resultados fundamentales en teoría de la medida e integración.
+        }}
+
+    \vspace{1cm}
+\end{center}
+
+\newpage
+
+% --- ÍNDICE ---
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+
+% --- CUERPO DEL TRABAJO ---
+\section{Introducción y Preliminares}
+
+En esta sección establecemos la notación y recordamos los conceptos fundamentales necesarios para abordar el Teorema de Radon-Nikodym.
+
+Un espacio de medida se denota como \( (X, \X, \mu) \), donde:
+\begin{itemize}[leftmargin=2em]
+    \item \(X\) es un conjunto no vacío (el espacio subyacente),
+    \item \(\X \) es una \(\sigma \)-álgebra de subconjuntos de \(X\),
+    \item \(\mu: \X \to [0, \infty]\) es una medida positiva.
+\end{itemize}
+
+Para una función medible no negativa \(f: X \to [0, \infty]\), la integral respecto a la medida \(\mu \) se denota mediante la notación estándar de Lebesgue:
+\[
+    \int_X f \, d\mu
+\]
+
+\begin{observacion}
+    En todo lo que sigue asumimos familiaridad con los conceptos básicos de teoría de la medida: conjuntos medibles, funciones medibles, integrales de Lebesgue, y convergencia en casi todo punto.
+\end{observacion}
+
+\subsection{Cargas y medidas con signo}
+
+\begin{definicion}[Carga]
+    Si \( \X \) es una \( \sigma \)-álgebra sobre un conjunto \( X \), entonces una función \( \nu \) a valores reales definida sobre \( \X \)
+    se llama \textbf{carga} si \( \nu(\varnothing) = 0 \) y \( \nu \) es contable aditiva en el sentido de que si \( {(E_n)}_{n \geq 1} \)
+    es una sucesión de conjuntos disjuntos en \( \X \) entonces \( \nu\left(\bigcup_{n=1}^\infty E_n\right) = \sum_{n=1}^\infty \nu(E_n) \).
+\end{definicion}
+
+Es claro que la suma y diferencia de cargas es una carga. Es más, cualquier combinación lineal de cargas es una carga.
+
+\begin{lemma}
+    Si \( {(E_n)}_{n \geq 1} \) y \( {(F_n)}_{n \geq 1} \) son sucesiones crecientes y decrecientes respectivamente de conjuntos en \( \X \),
+    entonces \begin{align*}
+        \nu\left(\bigcup_{n=1}^\infty E_n\right) & = \lim_{n \to \infty} \nu(E_n) \\
+        \nu\left(\bigcap_{n=1}^\infty F_n\right) & = \lim_{n \to \infty} \nu(F_n)
+    \end{align*}
+\end{lemma}
+
+\begin{definicion}
+    Si \( \nu \) es una carga en \( \X \) entonces un conjunto \( P \in \X \) es un \textbf{conjunto positivo} con respecto a \( \nu \)
+    si \( \nu(E \cap P) \geq 0 \) para todo \( E \in \X \). De manera análoga, \( N \) es un \textbf{conjunto negativo} con respecto a \( \nu \) si
+    \( \nu(E \cap N) \leq 0 \) para todo \( E \in \X \). Un conjunto \( M \in \X \) es un \textbf{conjunto nulo} con respecto a \( \nu \) si
+    \( \nu(E \cap M) = 0 \) para todo \( E \in \X \).
+\end{definicion}
+
+Se puede ver que un subconjunto medible de un conjunto positivo es positivo y que la unión de dos conjuntos positivos es positivo.
+
+Para avanzar hacia el teorema principal, es necesario extender el concepto de medida a valores reales en lugar de solo valores positivos.
+
+\begin{definicion}
+    Una \textbf{medida con signo} (o medida signada) en el espacio medible \((X, \X)\) es una función \(\nu: \X \to \R \) tal que:
+    \begin{enumerate}[label = (\roman*)]
+        \item \(\nu(\emptyset) = 0\),
+        \item Si \({\{ A_n \}}_{n=1}^{\infty}\) es una sucesión de conjuntos disjuntos en \(\X \), entonces:
+              \[\nu\left(\bigcup_{n=1}^{\infty} A_n\right) = \sum_{n=1}^{\infty} \nu(A_n),\]
+              donde la serie converge absolutamente o ambos lados son infinitos del mismo signo.
+    \end{enumerate}
+\end{definicion}
+
+\subsection{Teorema de Descomposición de Hahn}
+
+\begin{teorema}[Descomposición de Hahn]
+    Sea \(\nu \) una medida con signo en el espacio medible \((X, \X)\). Entonces existen dos conjuntos medibles \(P\) y \(N\) en \(\X \) tales que:
+    \begin{enumerate}[label = (\roman*)]
+        \item \(X = P \cup N\),
+        \item \(P \cap N = \varnothing \),
+        \item \(P\) es un conjunto positivo con respecto a \(\nu \),
+        \item \(N\) es un conjunto negativo con respecto a \(\nu \).
+    \end{enumerate}
+    Esta descomposición es única salvo por conjuntos de medida nula.
+\end{teorema}
+
+\begin{proof}
+    La clase \(\mathcal{P}\) de todos los conjuntos positivos con respecto a \(\nu \) es no vacía, pues \(\varnothing \in \mathcal{P}\). Definamos
+    \(\alpha = \sup \{ \nu(A) : A \in \mathcal{P} \} \). Sea \({(A_n)}_{n \geq 1}\) una sucesión de conjuntos en \(\mathcal{P}\) tal que
+    \(\lim_{n \to \infty} \nu(A_n) = \alpha \). Entonces definimos 
+    \[
+        P = \bigcup_{n \geq 1} A_n
+    \]
+    Dado que la unión de conjuntos positivos es positiva, la sucesión puede ser construida de forma que sea monótona creciente. Por lo tanto, \(P\) es un conjunto positivo para \(\nu \), pues para cualquier \(E \in \X \):
+    \[
+        \nu(E \cap P) = \nu \left( E \cap \bigcup_{n \geq 1} A_n \right) = \nu \left(\bigcup_{n \geq 1} (E \cap A_n) \right) = \lim_{n \to \infty} \nu(E \cap A_n) \geq 0
+    \]
+    ya que \(E \cap A_n \subseteq A_n\). Además, resulta que \(\alpha = \lim_{n \to \infty} \nu(A_n) = \nu(P) < +\infty \).
+
+    Resta ver que \(N = X \setminus P\) es un conjunto negativo para \(\nu \). Supongamos por absurdo que no lo es; entonces existe \(E \in \X \) tal que \(E \subseteq N\) y \(\nu(E) > 0\). El conjunto \(E\) no puede ser positivo, pues en ese caso \(P \cup E\) sería un conjunto positivo con \(\nu(P \cup E) = \nu(P) + \nu(E) > \alpha \), lo cual contradice que \(\alpha \) es el supremo de las medidas de conjuntos positivos.
+    
+    Luego, \(E\) debe contener algún conjunto con medida negativa. Sea \(n_1\) el primer número natural tal que \(E\) contiene un conjunto medible \(E_1\) que verifica \(\nu(E_1) \leq -1/n_1\). Entonces:
+    \[
+        \nu(E \setminus E_1) = \nu(E) - \nu(E_1) > \nu(E) > 0
+    \]
+    Sin embargo, \(E \setminus E_1\) tampoco puede ser positivo, pues \(P \cup (E \setminus E_1)\) superaría el supremo \(\alpha \).
+    
+    Aplicando el mismo razonamiento, \(E \setminus E_1\) contiene un conjunto con carga negativa. Sea \(n_2\) el primer natural tal que \(E \setminus E_1\) contiene un conjunto \(E_2 \in \X \) con \(\nu(E_2) \leq -1/n_2\). Repitiendo este argumento de forma inductiva, obtenemos una sucesión de conjuntos disjuntos \({(E_k)}_{k \geq 1}\) contenidos en \(E\) y una sucesión de naturales \(n_k\) tales que \(\nu(E_k) \leq -1/n_k\).
+    
+    Definamos
+    \[
+        F = \bigcup_{k \geq 1} E_k
+    \]
+    Dado que \(\nu \) es una medida con signo y \(\nu(E) > 0\), la serie converge, es decir:
+    \[
+        \nu(F) = \sum_{k \geq 1} \nu(E_k) \leq - \sum_{k \geq 1} \frac{1}{n_k}
+    \]
+    Como la suma converge, necesariamente \(-1/n_k \to 0\), lo que implica que \(n_k \to \infty \).
+    
+    Ahora, supongamos que existe un subconjunto medible \(G \subseteq E \setminus F\) tal que \(\nu(G) < 0\). Existirá entonces algún entero \(m\) tal que \(\nu(G) \leq -1/m\). Como \(n_k \to \infty \), para \(k\) suficientemente grande tendremos que \(n_k - 1 > m\), y por lo tanto:
+    \[
+        \nu(G) \leq -\frac{1}{n_k - 1}
+    \]
+    Pero \(G \subseteq E \setminus F \subseteq E \setminus (E_1 \cup \ldots \cup E_{k-1})\). Esto significa que en el paso \(k\) existía un conjunto (precisamente \(G\)) con medida menor o igual a \(-1/(n_k - 1)\), lo cual contradice la elección de \(n_k\) como el \textbf{primer} natural que cumplía dicha cota.
+    
+    En consecuencia, ningún subconjunto de \(E \setminus F\) puede tener medida negativa. Esto prueba que \(E \setminus F\) es un conjunto positivo. Dado que:
+    \[
+        \nu(E \setminus F) = \nu(E) - \nu(F) > 0
+    \]
+    (pues \(\nu(E) > 0\) y \(\nu(F) \leq 0\)), deducimos que \(P \cup (E \setminus F)\) es un conjunto positivo con medida estrictamente mayor que \(\alpha \), llegando a nuestra contradicción final. 
+    
+    Por lo tanto, la suposición original era falsa: \(N = X \setminus P\) es efectivamente un conjunto negativo con respecto a \(\nu \), completando la demostración.
+\end{proof}
+
+\subsection{Teorema de Descomposición de Jordan}
+
+\begin{teorema}[Descomposición de Jordan]
+    Toda medida con signo \(\nu \) en el espacio medible \((X, \X)\) puede expresarse de manera única como la diferencia de dos medidas positivas disjuntas:
+    \[\nu = \nu^+ - \nu^-,\]
+    donde \(\nu^+\) y \(\nu^-\) son mutuamente singulares.
+
+    Las medidas \(\nu^+\) y \(\nu^-\) se denominan \textbf{variación positiva} y \textbf{variación negativa} de \(\nu \), respectivamente.
+\end{teorema}
+
+\begin{definicion}
+    La \textbf{variación total} de una medida con signo \(\nu \) se define como:
+    \[|\nu| = \nu^+ + \nu^-.\]
+\end{definicion}
+
+\section{Continuidad Absoluta}
+
+Esta sección introduce la relación fundamental entre dos medidas que es central para el Teorema de Radon-Nikodym.
+
+\begin{definicion}
+    Sea \((X, \X, \mu)\) un espacio de medida y \(\nu \) una medida con signo en \((X, \M)\). Se dice que \(\nu \) es \textbf{absolutamente continua} respecto de \(\mu \), lo cual se denota por \(\nu \ll \mu \), si:
+    \[\text{Para todo } A \in \X, \quad \mu(A) = 0 \implies \nu(A) = 0.\]
+\end{definicion}
+
+\begin{ejemplo}
+    Sea \(f \in L^1_{\text{loc}}(\mu)\) una función localmente integrable. Defina \(\nu(A) = \int_A f \, d\mu \). Entonces \(\nu \ll \mu \), pues si \(\mu(A) = 0\), se tiene \(\nu(A) = \int_A f \, d\mu = 0\).
+\end{ejemplo}
+
+\begin{proposicion}
+    Si \(\nu \ll \mu \) y \(\mu \) es \(\sigma \)-finita, entonces \(|\nu| \ll \mu \).
+\end{proposicion}
+
+\section{El Teorema de Radon-Nikodym}
+
+Este es el resultado central de toda la exposición. El Teorema de Radon-Nikodym es un pilar fundamental en análisis funcional y teoría de la medida, con aplicaciones profundas en probabilidad, análisis armónico y ecuaciones diferenciales parciales.
+
+\begin{teorema}[Radon-Nikodym]
+    Sea \((X, \X, \mu)\) un espacio de medida \(\sigma \)-finito, y sea \(\nu \) una medida con signo \(\sigma \)-finita en \((X, \M)\). Si \(\nu \ll \mu \), entonces existe una única función medible \(f: X \to \R\) (única en casi todo punto respecto de \(\mu \)) tal que:
+    \[
+        \nu(E) = \int_E f \, d\mu \quad \text{para todo } E \in \M.
+    \]
+    Esta función \(f\) se llama la \textbf{derivada de Radon-Nikodym} de \(\nu \) respecto de \(\mu \) y se denota por \(f = \frac{d\nu}{d\mu}\).
+\end{teorema}
+
+\begin{proof}
+    \textit{Esquema de la demostración} (según Bartle).
+
+    La construcción de \(f\) procede en varios pasos:
+
+    \begin{enumerate}[label=\textbf{Paso \arabic*.}]
+        \item \textbf{Reducción al caso de medidas positivas:} Usando la descomposición de Jordan, se reduce al caso donde \(\nu \) es una medida positiva.
+
+        \item \textbf{Aplicación del Teorema de Radon-Nikodym para medidas positivas:} Se demuestra que existe \(f \in L^1(\mu)\) con \(f \geq 0\) tal que \(\nu(E) = \int_E f \, d\mu \) para todo \(E \in \X \).
+
+        \item \textbf{Unicidad:} Si \(f\) y \(g\) satisfacen la propiedad anterior, entonces \(\int_E (f - g) \, d\mu = 0\) para todo \(E \in \X \), lo que implica \(f = g\) en casi todo punto.
+    \end{enumerate}
+
+    La demostración completa requiere técnicas de teoría de espacios de Hilbert y es técnicamente sofisticada.
+\end{proof}
+
+\begin{corolario}
+    Si \((X, \X, \mu)\) es \(\sigma \)-finito y \(\nu \ll \mu \) es \(\sigma \)-finita, entonces la derivada de Radon-Nikodym satisface:
+    \[\frac{d\nu}{d\mu} \in L^1_{\text{loc}}(\mu).\]
+\end{corolario}
+
+\begin{ejemplo}
+    Sea \(X = [0, 1]\), \(\X \) la \(\sigma \)-álgebra de Borel, y \(\mu \) la medida de Lebesgue. Defina \(g: [0, 1] \to \R_{\geq 0}\) como una función medible positiva integrable y ponga \(\nu(A) = \int_A g \, d\mu \). Entonces \(\nu \ll \mu \) y \(\frac{d\nu}{d\mu} = g\) en casi todo punto.
+\end{ejemplo}
+
+\begin{observacion}
+    El Teorema de Radon-Nikodym no es válido en general sin la condición \(\sigma \)-finita. Sin embargo, existen generalizaciones para espacios de medida no-\(\sigma \)-finitos bajo hipótesis adicionales apropiadas.
+\end{observacion}
+
+\newpage
+
+% --- BIBLIOGRAFÍA ---
+\section*{Referencias Bibliográficas}
+\addcontentsline{toc}{section}{Referencias Bibliográficas}
+
+\begin{thebibliography}{99}
+
+    \bibitem{bartle} Bartle, R. G. (1966). \textit{The Elements of Integration and Lebesgue Measure}. John Wiley \& Sons. [Referencia clásica y completa sobre teoría de la medida.]
+
+    \bibitem{favazo} Fava, N., \& Zo, F. (1996). \textit{Medida e integral de Lebesgue}. Red Olímpica. [Excelente exposición en español de la teoría de Lebesgue.]
+
+    \bibitem{rudin} Rudin, W. (1987). \textit{Real and Complex Analysis} (3rd ed.). McGraw-Hill. [Tratamiento riguroso y profundo de análisis real y complejo, incluye aplicaciones.]
+
+    \bibitem{halmos} Halmos, P. R. (1950). \textit{Measure Theory}. Springer. [Fundacional en teoría de la medida moderna.]
+
+\end{thebibliography}
+
+\end{document}
