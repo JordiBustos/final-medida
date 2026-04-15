@@ -99,6 +99,8 @@
 
 \newcommand{\X}{\mathfrak{X}}
 
+\newcommand{\coint}[1]{\left[ #1 \right)}
+
 % --- Configuración de tcolorbox para teoremas ---
 \tcbset{
     colback=white,
@@ -150,7 +152,7 @@
 
     \vspace{2.5cm}
 
-    {\Huge \textbf{\textcolor{darkblue}{Teorema de Radon-Nikodym}}}\\
+    {\Huge \textbf{\textcolor{darkblue}{Diferenciación de medidas}}}\\
 
     \vspace{3cm}
 
@@ -176,6 +178,26 @@
 
     \vspace{1cm}
 \end{center}
+
+\newpage
+
+% --- EPÍGRAFE ---
+\thispagestyle{empty}
+\vspace*{\fill}
+
+\begin{flushright}
+    \textit{``Considero a cada hombre como un deudor}\\
+    \textit{de su profesión,}\\
+    \textit{y ya que de ella recibe sustento y provecho,}\\
+    \textit{así debe procurar,}\\
+    \textit{mediante el estudio,}\\
+    \textit{servirle de ayuda y ornato.''}
+
+    \vspace{0.5cm}
+    \textbf{--- Francis Bacon}
+\end{flushright}
+
+\vspace*{\fill}
 
 \newpage
 
@@ -228,7 +250,7 @@ Para una función medible no negativa \(f: X \to [0, \infty]\), la integral resp
     En todo lo que sigue asumimos familiaridad con los conceptos básicos de teoría de la medida: conjuntos medibles, funciones medibles, integrales de Lebesgue, y convergencia \( \mu \)-c.t.p.
 \end{observacion}
 
-\section{Cargas y medidas con signo}
+\section{Cargas y preliminares para el teorema de Radon-Nikodym}
 
 \begin{definicion}[Carga]
     Si \( \X \) es una \( \sigma \)-álgebra sobre un conjunto \( X \), entonces una función \( \nu \) a valores reales extendidos definida sobre \( \X \)
@@ -715,6 +737,71 @@ Para expresar el concepto opuesto introducimos la idea de medida mutuamente sing
 \begin{proof}
     TODO
 \end{proof}
+
+\section{Diferenciación de medidas}
+
+Comencemos con un teorema sobre derivadas de ciertas funciones para motivar la idea de diferenciación de medidas. En esta sección notaremos \( m \)
+la medida de Lebesgue en \( \R \).
+
+\begin{teorema}
+    Supongamos que \( \mu \) es una medida de Borel en \( \R \) y que \[
+        f(x) = \mu\left( (-\infty, x) \right) \quad (x \in \R)
+    \]
+    Si \( x, A \in \R \) entonces las siguientes proposiciones son equivalentes:\begin{enumerate}[label = (\roman*)]
+        \item \( f \) es diferenciable en \( x \) y \( f'(x) = A \).
+        \item Para todo \( \varepsilon > 0 \; \exists \delta > 0 \) tal que \[
+                  \left| \dfrac{\mu(I)}{m(I)} - A \right| < \varepsilon
+              \] para todo segmento abierto \( I \) que contenga a \( x \) y cuya longitud es menor que \( \delta \).
+    \end{enumerate}
+\end{teorema}
+\begin{proof}
+    Consideremos \( \mu - A m \) en lugar de \( \mu \), restringida a algún segmento que contenga a \( x \) de modo que la nueva medida sea finita.
+    Esto muestra que no se pierde generalidad suponiendo \( A = 0 \). Si \( f'(x) = 0 \) y \( \varepsilon > 0 \) existe \( \delta > 0 \) tal que \[
+        \left| f(t) - f(x) \right| \leq \varepsilon | t - x |
+    \]
+    si \( | t - x | < \delta \). Supongamos que \( x \in I \), \( I = (s, t) \) y \( t - s < \delta \). Tomemos \( s_n \) tal que \[
+        x > s_1 > s_2 > \cdots
+    \]
+    con \( s_n \to s \). Entonces \begin{align*}
+        | \mu(\coint{s_n, t}) | & = | f(t) - f(s_n) | \leq |f(t) - f(x)| + |f(x) - f(s_n)|                                    \\
+                                & \leq \varepsilon |t - x| + \varepsilon |x - s_n| = \varepsilon (t - s_n) < \varepsilon m(I)
+    \end{align*}
+    y como \( I = \bigcup_{n \geq 1} \coint{s_n, t} \) se deduce que \( |\mu(I)| \leq \varepsilon m(I) \). Por lo que (I) implica (II).
+
+    Por otro lado, supongamos que vale (II) con \( A = 0 \). Tomemos \( \varepsilon > 0 \) y elijamos \( \delta > 0 \) como en (II).
+    Si \( s < x < t \) y \( t - s < \delta \), elijamos \( s_n \) de modo que \[
+        t-\delta < s_1 < s_2 < \cdots
+    \]
+    y \( s_n \to s \). Entonces \[
+        |\mu((s_n, t))| < \varepsilon (t - s_n) \quad \forall n > n_0 \in \N
+    \]
+    Como \( \coint{s, t} = \bigcap_{n \geq 1} (s_n, t) \) y \[
+        f(t) - f(s) = \mu\left( \coint{s, t} \right)
+    \]
+    se deduce que \[
+        \left | f(t) - f(s) \right| \leq \varepsilon |t - s| \quad (s < x < t < s + \delta)
+    \]
+    Si se verifica (II), entonces \( \mu(\{ x \}) = 0 \) donde \( \{ x \} \) es el conjunto que consta solo de \( x \). En consecuencia, \( f \) es continua en \( x \).
+    Por lo tanto, o \( s \) o \( t \) pueden cambiarse por \( x \) en la desigualdad anterior, lo que implica que \( f \) es diferenciable en \( x \) y \( f'(x) = 0 \).
+\end{proof}
+
+\begin{definicion}
+    El teorema anterior sugiere que la derivada de \( \mu \) en \( x \) podría definirse como el límite de los cocientes \[
+        \dfrac{\mu(I)}{m(I)}
+    \]
+    cuando los segmentos \( I \) se contraen hacia el punto \( x \). Se podrían considerar cocientes de la forma \( \frac{\mu(E)}{m(E)} \) para conjuntos medibles \( E \) de alguna familia \( \mathcal{E} \).
+
+    Supongamos que \( x \in \R^k \). Una sucesión \( {( E_i )}_{i \geq 1} \) de conjuntos medibles Borel en \( \R^k \) se dice que \textbf{se contrae aceptablemente} a \( x \)
+    si existe un número \( \alpha > 0 \) con la siguiente propiedad: Cada \( E_i \) está en una bola abierta \( B(x, r_i) \) con centro \( x \) y radio \( r_i > 0 \), tal que \[
+        m(E_i) \geq \alpha m(B(x, r_i)) \quad (i = 1, 2, \ldots)
+    \]
+    y \( r_i \to 0 \) cuando \( i \to +\infty \). Notar que \( m \) ahora es la medida de Lebesgue en \( \R^k \).
+\end{definicion}
+
+Notemos que en la definición anterior no se requiere que \( x \in E_i \), ni siquiera que \( x \) esté en la adherencia de \( E_i \).
+
+TODO
+
 \newpage
 
 % --- BIBLIOGRAFÍA ---
@@ -727,9 +814,7 @@ Para expresar el concepto opuesto introducimos la idea de medida mutuamente sing
 
     \bibitem{favazo} Fava, N., \& Zo, F. (1996). \textit{Medida e integral de Lebesgue}. Red Olímpica. [Excelente exposición en español de la teoría de Lebesgue.]
 
-    \bibitem{rudin} Rudin, W. (1987). \textit{Real and Complex Analysis} (3rd ed.). McGraw-Hill. [Tratamiento riguroso y profundo de análisis real y complejo, incluye aplicaciones.]
-
-    \bibitem{halmos} Halmos, P. R. (1950). \textit{Measure Theory}. Springer. [Fundacional en teoría de la medida moderna.]
+    \bibitem{rudin} Rudin, W. (1987). \textit{Real and Complex Analysis} (3rd ed.). McGraw-Hill. [Capítulo 8: Diferenciación de medidas]
 
 \end{thebibliography}
 
