@@ -676,19 +676,12 @@ Esta sección introduce la relación fundamental entre dos medidas que es centra
 \end{proof}
 
 \begin{teorema}[Radon-Nikodym para medidas \(\sigma \)-finitas]
-    Sea \( \nu \) y \( \mu \) medidas \( \sigma \)-finitas en \( \X \) y supongamos que \( \nu \ll \mu \). Entonces existe una función medible \( f \in M^+ \) tal que:\[
-        \nu(E) = \int_E f \, d\mu \quad \text{para todo } E \in \X.
-    \]
-    Además, la función \( f \) es única salvo conjuntos de medida \( \mu \)-nula, y se denota por \( f = \frac{d\nu}{d\mu} \) y se llama la \textbf{derivada de Radon-Nikodym} de \( \nu \) respecto de \( \mu \).
+    Sean \( \nu \) y \( \mu \) ahora medidas \( \sigma \)-finitas en \( \X \) y supongamos que \( \nu \ll \mu \).
+    Entonces vale el mismo resultado que en el teorema anterior.
 \end{teorema}
 \begin{proof}
     TODO
 \end{proof}
-
-\begin{corolario}
-    Si \((X, \X, \mu)\) es \(\sigma \)-finito y \(\nu \ll \mu \) es \(\sigma \)-finita, entonces la derivada de Radon-Nikodym satisface:
-    \[\frac{d\nu}{d\mu} \in L^1_{\text{loc}}(\mu).\]
-\end{corolario}
 
 \begin{ejemplo}
     Sea \(X = [0, 1]\), \(\X \) la \(\sigma \)-álgebra de Borel, y \(\mu \) la medida de Lebesgue. Defina \(g: [0, 1] \to \R_{\geq 0}\) como una función medible positiva integrable y ponga \(\nu(A) = \int_A g \, d\mu \). Entonces \(\nu \ll \mu \) y \(\frac{d\nu}{d\mu} = g\) en casi todo punto.
@@ -698,6 +691,30 @@ Esta sección introduce la relación fundamental entre dos medidas que es centra
     El Teorema de Radon-Nikodym no es válido en general sin la condición \(\sigma \)-finita.
 \end{observacion}
 
+\section{Descomposición de Lebesgue}
+
+En terminos intuitivos, una medida \( \nu \) es absolutamente continua con respecto a otra medida \( \mu \) en el sentido de que conjuntos que tienen medida \( \mu \)
+pequeña también tienen medida \( \nu \) pequeña.
+Para expresar el concepto opuesto introducimos la idea de medida mutuamente singular.
+
+\begin{definicion}[Medida mutuamente singulares]
+    Sean \( \nu \) y \( \mu \) medidas en \( \X \). Se dice que \( \nu \) y \( \mu \) son mutuamente singulares, denotado por \( \nu \perp \mu \),
+    si existen conjuntos medibles \( A, B \in \X \) con \( A \cup B = X \), \( A \cap B = \varnothing \),
+    tal que \( \nu(A) = 0 \) y \( \mu(B) = 0 \).
+\end{definicion}
+
+\begin{observacion}
+    Notemos que esta definición es simétrica, es decir, \( \nu \perp \mu \) si y solo si \( \mu \perp \nu \).
+\end{observacion}
+
+\begin{teorema}[Descomposición de Lebesgue]
+    Sean \( \nu \) y \( \mu \) medidas \( \sigma \)-finitas en \( \X \).
+    Entonces existen dos medidas \( \nu_1 \) tal que \( \nu_1 \perp \mu \) y \( \nu_2 \) tal que \( \nu_2 \ll \mu \) tal que \( \nu = \nu_1 + \nu_2 \).
+    Además, está descomposición es única.
+\end{teorema}
+\begin{proof}
+    TODO
+\end{proof}
 \newpage
 
 % --- BIBLIOGRAFÍA ---
