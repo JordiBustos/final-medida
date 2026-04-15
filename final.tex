@@ -214,9 +214,14 @@ Un espacio de medida se denota como \( (X, \X, \mu) \), donde:
     \item \(\mu: \X \to [0, \infty]\) es una medida positiva.
 \end{itemize}
 
+\begin{definicion}[Función medible]
+    Una función \( f : X \to \R \) es \textbf{medible} con respecto a la \( \sigma \)-álgebra \( \X \) si
+    para cada \( \alpha \in \R \) el conjunto \( \{ x \in X : f(x) > \alpha \} \) pertenece a \( \X \).
+\end{definicion}
+
 Para una función medible no negativa \(f: X \to [0, \infty]\), la integral respecto a la medida \(\mu \) se denota mediante la notación estándar de Lebesgue:
 \[
-    \int_X f \, d\mu = \sup \left \{ \int_X \varphi \, d\mu : 0 \leq \varphi \leq f, s \text{ es una función simple} \right \}.
+    \int_X f \, d\mu = \sup \left \{ \int_X \varphi \, d\mu : 0 \leq \varphi \leq f, \, \varphi \text{ es una función simple} \right \}
 \]
 
 \begin{observacion}
@@ -259,15 +264,101 @@ Es claro que la suma y diferencia de cargas es una carga. Es más, cualquier com
 \end{proof}
 
 \begin{definicion}
-    Notaremos \( M^+ \) al conjunto de todas las funciones \( \X \)-medibles de \( X \) en la recta real extendida que son no negativas.
-    La colección \( M \) está formada por todas las funciones \( \X \)-medibles de \( X \) en la recta real extendida. Finalmente, \( L \) es el conjunto de todas las funciones \( f \in M \) tales que \( f^+ \) y \( f^- \) pertenecen a \( M^+ \).
+    Notaremos \( M^+ = M^+(X, \X) \) al conjunto de todas las funciones \( \X \)-medibles de \( X \) en la recta real extendida que son no negativas.
+    La colección \( M = M(X, \X) \) está formada por todas las funciones \( \X \)-medibles de \( X \) en la recta real extendida.
+
+    Finalmente, \( L = L(X, \X, \mu) \) es el conjunto de todas las funciones \( f : X \to \R \), \( \X \)-medibles e integrables. Es decir \[
+        \int f^+ \, d\mu < \infty \quad \text{y} \quad \int f^- \, d\mu < \infty
+    \] tal que \[
+        \int f \, d \mu = \int f^+ \, d\mu - \int f^- \, d\mu
+    \]
 \end{definicion}
+
+\begin{proposicion}\label{prop:monotona_creciente}
+    Si \( {(f_n)}_{n \geq 1} \) es una sucesión monotona creciente de funciones en \( M^+(X, \X) \) entonces \( f = \lim_{n \to \infty} f_n \) es una función medible.
+\end{proposicion}
+\begin{proof}
+    Se sigue de que \( f(x) = \lim f_n(x) = \liminf f_n(x) \) para todo \( x \in X \) y \( f^* = \liminf f_n \) es una función medible.
+\end{proof}
+
+\begin{lemma}\label{lem:monotonia_integral}
+    Si \( f \), \( g \in M^+ \) y \( f \leq g \) entonces \[
+        \int f \, d \mu \leq \int g \, d \mu
+    \]
+\end{lemma}
+\begin{proof}
+    Si \( \varphi \) es una función simple y medible en \( M^+ \) tal que \( 0 \leq \varphi \leq f \) entonces
+    \[
+        \int \varphi \, d \mu \leq \int f \, d \mu \leq \int g \, d \mu
+    \]
+    Por lo tanto, tomando supremo sobre todas las funciones simples \( \varphi \) que satisfacen \( 0 \leq \varphi \leq f \) se obtiene que \[
+        \int f \, d \mu = \sup_{\varphi} \int \varphi \, d \mu \leq \int g \, d \mu
+    \]
+\end{proof}
+
+\begin{lemma}\label{lem:integral_subconjunto}
+    Si \( f \in M^+ \) y \( E \), \( F \in \X \), si \( E \subseteq F \) entonces \[
+        \int_E f \, d \mu \leq \int_F f \, d \mu
+    \]
+\end{lemma}
+\begin{proof}
+    Como \( f \chi_E \leq f \chi_F \) este lema es una consecuencia directa del resultado anterior.
+\end{proof}
 
 \begin{teorema}[Teorema de la convergencia monótona]
     Si \( {(f_n)}_{n \geq 1} \) es una sucesión monotona creciente de funciones en \( M^+(X, \X) \) que convergen a \( f \) entonces \[
         \int f \, d\mu = \lim_{n \to \infty} \int f_n \, d\mu
     \]
 \end{teorema}
+\begin{proof}
+    Por la Proposición~\ref{prop:monotona_creciente} se tiene que \( f \) es una función medible. Dado que \( f_n \leq f_{n+1} \leq f \) se sigue por el Lema~\ref{lem:monotonia_integral} que \[
+        \int f_n \, d \mu \leq \int f_{n+1} \, d \mu \leq \int f \, d \mu \quad \forall n \geq 1
+    \]
+    Por lo tanto se tiene que \[
+        \lim \int f_n \, d \mu \leq \int f \, d \mu
+    \]
+    Para ver la desigualdad contraria y así establecer la igualdad definamos \( \alpha \in (0, 1) \) y sea \( \varphi \) una función simple y medible que satisface \[
+        0 \leq \varphi \leq f
+    \]
+    Sea \[
+        A_n = \{ x \in X : f_n(x) \geq \alpha \varphi(x) \}
+    \]
+    tal que \( A_n \in \X \), \( A_n \geq A_{n+1} \) y \( X = \bigcup_{n \geq 1} A_n \). Por lo tanto, por el Lema~\ref{lem:integral_subconjunto}:\[
+        \int_{A_n} \alpha \varphi \, d \mu \leq \int_{A_n} f_n \, d \mu \leq \int f_n \, d \mu
+    \]
+    Como \( (A_n) \) es una sucesión monótona creciente y tiene unión \( X \) se sigue que, por el Lema~\ref{lem:monotonia_integral}, \[
+        \int \varphi \, d \mu = \lim \int_{A_n} \varphi \, d \mu
+    \]
+    Luego, tomando límite con respecto a \( n \) en la ecuación anterior:\[
+        \alpha \int \varphi \, d \mu \leq \lim \int f_n \, d \mu
+    \]
+    Como vale para todo \( 0 < \alpha < 1 \), deducimos que:\[
+        \int \varphi \, d \mu \leq \lim \int f_n \, d \mu
+    \]
+    y como \( \varphi \in M^+ \) es una función simple arbitaria que satisface \( 0 \leq \varphi \leq f \) concluímos que \[
+        \int f \, d \mu = \sup_{\varphi} \int \varphi \, d \mu \leq \lim \int f_n \, d \mu
+    \]
+    Juntando las dos desigualdades obtenemos que \[
+        \int f \, d \mu = \lim \int f_n \, d \mu
+    \]
+\end{proof}
+
+\begin{lemma}[Lema de Fatou]
+    Si \( {(f_n)}_{n \geq 1} \) es una sucesión de funciones en \( M^+ \) entonces \[
+        \int \liminf f_n \, d\mu \leq \liminf \int f_n \, d\mu
+    \]
+\end{lemma}
+\begin{proof}
+    Sea \( g_m = \inf \{ f_m, f_{m+1}, \ldots \} \) tal que \( g_m \leq f_n \) siempre que \( m \leq n \). Entonces: \[
+        \int g_m \, d \mu \leq \int f_n \, d \mu \quad \forall m \leq n
+    \]
+    y vale que \[
+        \int g_m \, d \mu \leq \liminf \int f_n \, d \mu
+    \]
+    Como la sucesión \( (g_m) \) es monótona creciente y converge a \( \liminf f_n \) se sigue por el teorema de la convergencia monótona que: \[
+        \int \liminf f_n \, d \mu = \lim \int g_m \, d \mu \leq \liminf \int f_n \, d \mu
+    \]
+\end{proof}
 
 \begin{proposicion}
     Si \( f \in M^+ \) y \( \nu : \X \to [0, \infty] \) dada por \( \nu(E) = \int_E f \, d\mu \) entonces \( \nu \) es una medida en \( \X \).
@@ -334,15 +425,34 @@ Nos referimos a esta relación diciendo que la integral indefinida de una funci�
     \( P_2 \setminus P_1 \) es un conjunto positivo por la proposición anterior. Por lo tanto, \( \nu(E \cap (P_2 \setminus P_1)) \geq 0 \). En consecuencia, \( \nu(E \cap (P_1 \cup P_2)) \geq 0 \) para todo \( E \in \X \), lo que implica que \( P_1 \cup P_2 \) es un conjunto positivo.
 \end{proof}
 
-\begin{definicion}
-    Una \textbf{medida con signo} (o medida signada) en el espacio medible \((X, \X)\) es una función \(\nu: \X \to \R \) tal que:
-    \begin{enumerate}[label = (\roman*)]
-        \item \(\nu(\varnothing) = 0\),
-        \item Si \({\{ A_n \}}_{n=1}^{\infty}\) es una sucesión de conjuntos disjuntos en \(\X \), entonces:
-              \[\nu\left(\bigcup_{n=1}^{\infty} A_n\right) = \sum_{n=1}^{\infty} \nu(A_n),\]
-              donde la serie converge absolutamente o ambos lados son infinitos del mismo signo.
-    \end{enumerate}
-\end{definicion}
+Demostraremos ahora dos resultados que serán utilizados directamente en la demostración del teorema de Radon-Nikodym.
+
+\begin{teorema}\label{teo:convergencia_en_medida}
+    Sea \( (f_n) \) una sucesión de funciones medibles a valores reales que es de Cauchy en medida. Entonces existe una subsucesión que converge a una función medible \( f \) en medida y \( \mu \)-c.t.p.
+\end{teorema}
+\begin{proof}
+    TODO
+\end{proof}
+
+\begin{proposicion}\label{prop:funcion_casi_nula}
+    Si \( f \in M^+ \). Entonces \( f(x) = 0 \) en casi todo punto \( x \in X \) si y solo si \( \int f \, d\mu = 0 \).
+\end{proposicion}
+\begin{proof}
+    Si vale \( \int f \, d \mu = 0 \), definamos \( E_n = \{ x \in X : f(x) > 1/n \} \) tal que \( f \geq 1/n \chi_{E_n} \) y, por lo tanto:\[
+        0 = \int f \, d \mu \geq \int \frac{1}{n} \chi_{E_n} \, d \mu = \frac{1}{n} \mu(E_n) \geq 0
+    \]
+    luego, \( \mu(E_n) = 0 \) y por lo tanto el conjunto \[
+        \{ x \in X : f(x) > 0 \} = \bigcup_{n \geq 1} E_n
+    \]
+    también tiene medida nula. En consecuencia, \( f(x) = 0 \) para casi todo \( x \in X \).
+
+    Reciprocamente, si \( f(x) = 0 \) para casi todo \( x \in X \). Si \( E = \{ x \in X : f(x) > 0 \} \) entonces \( \mu(E) = 0 \) y sea \( f_n = n \chi_E \) tal que \[
+        f \leq \liminf f_n
+    \]
+    luego, por el lema de Fatou, se tiene que \[
+        0 \leq \int f \, d \mu \leq \liminf \int f_n \, d \mu = \liminf n \mu(E) = \liminf n \cdot 0 = 0
+    \]
+\end{proof}
 
 \section{Teorema de Descomposición de Hahn}
 
@@ -485,6 +595,20 @@ Esta sección introduce la relación fundamental entre dos medidas que es centra
     \[\text{Para todo } A \in \X, \quad \mu(A) = 0 \implies \nu(A) = 0.\]
 \end{definicion}
 
+\begin{lemma}
+    Si \( \nu \), \( \mu \) son medidas finitas en \( \X \). Entonces \( \nu \ll \mu \iff \, \forall \varepsilon > 0 \; \exists \delta > 0 \) tal que si \( E \in \X \) y \( \mu(E) < \delta \implies \nu(E) < \varepsilon \).
+\end{lemma}
+\begin{proof}
+    Si \( \nu \ll \mu \) y \( \mu(E) = 0 \) entonces \( \nu(E) < \varepsilon \) para todo \( \varepsilon > 0 \). Por lo tanto, si \( \nu \ll \mu \) se cumple la condición de la derecha tomando \( \delta = 0 \).
+
+    Por otro lado, supongamos que \( \exists \varepsilon > 0 \) y conjuntos \( {(E_n)}_{n \geq 1} \) en \( \X \) con \( \mu(E_n) < 2^{-n} \) y \( \nu(E_n) \geq \varepsilon \).
+    Entonces, sea \( F_n = \bigcup_{k \geq n} E_k \) tal que \( \mu(F_n) < 2^{-n+1} \) y \( \nu(F_n) \geq \varepsilon \). Dado que \( (F_n) \) es una sucesión decreciente de conjuntos medibles:\begin{align*}
+        \mu\left( \bigcap_{n \geq 1} F_n \right) & = \lim_{n \to \infty} \mu(F_n) = 0              \\
+        \nu\left( \bigcap_{n \geq 1} F_n \right) & = \lim_{n \to \infty} \nu(F_n) \geq \varepsilon
+    \end{align*}
+    Por lo tanto \( \nu \) no es absolutamente continua respecto de \( \mu \).
+\end{proof}
+
 \begin{ejemplo}
     Sea \(f \in L^1_{\text{loc}}(\mu)\) una función localmente integrable. Defina \(\nu(A) = \int_A f \, d\mu \). Entonces \(\nu \ll \mu \), pues si \(\mu(A) = 0\), se tiene \(\nu(A) = \int_A f \, d\mu = 0\).
 \end{ejemplo}
@@ -495,30 +619,70 @@ Esta sección introduce la relación fundamental entre dos medidas que es centra
 
 \section{El Teorema de Radon-Nikodym}
 
-Este es el resultado central de toda la exposición. El Teorema de Radon-Nikodym es un pilar fundamental en análisis funcional y teoría de la medida, con aplicaciones profundas en probabilidad, análisis armónico y ecuaciones diferenciales parciales.
-
-\begin{teorema}[Radon-Nikodym]
-    Sea \((X, \X, \mu)\) un espacio de medida \(\sigma \)-finito, y sea \(\nu \) una medida con signo \(\sigma \)-finita en \((X,  \X)\). Si \(\nu \ll \mu \), entonces existe una única función medible \(f: X \to \R\) (única en casi todo punto respecto de \(\mu \)) tal que:
-    \[
+\begin{teorema}[Radon-Nikodym para medidas finitas]
+    Sea \( \nu \) y \( \mu \) medidas finitas en \( \X \) y supongamos que \( \nu \ll \mu \). Entonces existe una función medible \( f \in M^+ \) tal que:\[
         \nu(E) = \int_E f \, d\mu \quad \text{para todo } E \in \X.
     \]
-    Esta función \(f\) se llama la \textbf{derivada de Radon-Nikodym} de \(\nu \) respecto de \(\mu \) y se denota por \(f = \frac{d\nu}{d\mu}\).
+    Además, la función \( f \) es única salvo conjuntos de medida \( \mu \)-nula, y se denota por \( f = \frac{d\nu}{d\mu} \) y se llama la \textbf{derivada de Radon-Nikodym} de \( \nu \) respecto de \( \mu \).
 \end{teorema}
-
 \begin{proof}
-    \textit{Esquema de la demostración} (según Bartle).
+    Sea \( c > 0 \) y \( P(c) \), \( N(c) \) la descomposición de Hahn de la la carga \( \nu - c \mu \). Dado \( k \in \N \), consideremos los siguientes conjuntos medibles:\[
+        A_1 = N, \quad A_{k+1} = N\left( (k+1) c \right) \setminus \bigcup_{j = 1}^k A_j
+    \]
+    es claro que los conjuntos \( A_k \), \( k \in \N \) son disjuntos y que \[
+        \bigcup_{j = 1}^k N(jc) = \bigcup_{j = 1}^k A_j
+    \]
+    Se sigue que:\[
+        A_k = N(kc) \setminus \bigcup_{j = 1}^{k-1} N(jc) = N(kc) \cap \bigcap_{j = 1}^{k-1} P(jc)
+    \]
+    Por lo tanto, si \( E \) es un subconjunto medible de \( A_k \) entonces \( E \subseteq N(kc) \) y \( E \subseteq P((k-1)c) \), luego:\[
+        (k-1)c \mu(E) \leq \nu(E) \leq k c \mu(E)
+    \]
+    Definamos \( B = X \setminus \bigcup_{j \geq 1} A_j = \bigcap_{j \geq 1} P(jc) \) tal que \( B \subseteq P(kc) \, \forall k \in \N \). Esto implica que:\[
+        0 \leq k c \mu(B) \leq \nu(B) \leq \nu(X) < +\infty \quad \forall k \in \N
+    \]
+    Por lo tanto, \( \mu(B) = 0 \). Como \( \nu \ll \mu \) se sigue que \( \nu(B) = 0 \).
+    Definamos \begin{align*}
+        f_c(x) = \begin{cases}
+                     (k-1) c & \text{si } x \in A_k \\
+                     0       & \text{si } x \in B
+                 \end{cases}
+    \end{align*}
+    Si \( E \) es un conjunto medible arbitrario, entonces \( E \) es la unión de los conjuntos disjuntos \( E \cap B \), \( E \cap A_k \) para \( k \in \N \). Por lo tanto:\[
+        \int_E f_c \, d \mu \leq \nu(E) \leq \int_E (f_c + c) \, d \mu \leq \int_E f_c \, d \mu + c \mu(X)
+    \]
+    Utilizando esta construcción consideremos ahora \( c = 2^{-n} \) para \( n \in \N \) y obtengamos una sucesión de funciones \( f_n \) tal que:\[
+        \int_E f_n \, d \mu \leq \int_E f_n \, d \mu + 2^{-n} \mu(X) \quad \forall n \in \N
+    \]
+    Sea \( m \geq n \) y observando que \begin{align*}
+        \int_E f_n \, d \mu & \leq \nu(E) \leq \int_E f_m \, d \mu + 2^{-m} \mu(X) \\
+        \int_E f_m \, d \mu & \leq \nu(E) \leq \int_E f_n \, d \mu + 2^{-n} \mu(X)
+    \end{align*}
+    se concluye que \[
+        \left| \int_E (f_n - f_m) \, d \mu \right| \leq 2^{-n} \mu(X) \quad \forall E \in \X
+    \]
+    Si dejamos \( E \) ser los conjuntos tales que el integrando es positivo o negativo y combinamos ambas ecuaciones obtenemos que:\[
+        \int |f_n - f_m| \, d \mu \leq 2^{-n+1} \mu(X) \quad \forall m \geq n
+    \]
+    Luego, \( (f_n) \) converge en medida y en \( L^1(\mu) \) a \( f \). Como \( f_n \in M^+ \) es claro que \( f \in M^+ \) por el Teorema~\ref{teo:convergencia_en_medida}. Además, \[
+        \left | \int_E f_n \, \mu - \int_E f \, d \mu \right| \leq \int_E |f_n - f| \, d \mu \leq \int | f_n - f | \, d \mu
+    \]
+    finalmente: \[ \nu(E) = \lim \int_E f_n \, d \mu = \int_E f \, d \mu \quad \forall E \in \X \]
 
-    La construcción de \(f\) procede en varios pasos:
+    Para ver la unicidad de \( f \) salvo conjuntos de medida \( \mu \) nula, supongamos que \( h \in M^+ \) es otra función que satisface\[
+        \nu(E) = \int_E f \, d \mu = \int_E h \, d \mu \quad \forall E \in \X
+    \]
+    Sea \( E_1 = \{ x \in X : f(x) > h(x) \} \) y \( E_2 = \{ x \in X : h(x) > f(x) \} \). Entonces, por la Proposición~\ref{prop:funcion_casi_nula} se tiene que \( f(x) = h(x) \, \mu \)-c.t.p
+\end{proof}
 
-    \begin{enumerate}[label=\textbf{Paso \arabic*.}]
-        \item \textbf{Reducción al caso de medidas positivas:} Usando la descomposición de Jordan, se reduce al caso donde \(\nu \) es una medida positiva.
-
-        \item \textbf{Aplicación del Teorema de Radon-Nikodym para medidas positivas:} Se demuestra que existe \(f \in L^1(\mu)\) con \(f \geq 0\) tal que \(\nu(E) = \int_E f \, d\mu \) para todo \(E \in \X \).
-
-        \item \textbf{Unicidad:} Si \(f\) y \(g\) satisfacen la propiedad anterior, entonces \(\int_E (f - g) \, d\mu = 0\) para todo \(E \in \X \), lo que implica \(f = g\) en casi todo punto.
-    \end{enumerate}
-
-    La demostración completa requiere técnicas de teoría de espacios de Hilbert y es técnicamente sofisticada.
+\begin{teorema}[Radon-Nikodym para medidas \(\sigma \)-finitas]
+    Sea \( \nu \) y \( \mu \) medidas \( \sigma \)-finitas en \( \X \) y supongamos que \( \nu \ll \mu \). Entonces existe una función medible \( f \in M^+ \) tal que:\[
+        \nu(E) = \int_E f \, d\mu \quad \text{para todo } E \in \X.
+    \]
+    Además, la función \( f \) es única salvo conjuntos de medida \( \mu \)-nula, y se denota por \( f = \frac{d\nu}{d\mu} \) y se llama la \textbf{derivada de Radon-Nikodym} de \( \nu \) respecto de \( \mu \).
+\end{teorema}
+\begin{proof}
+    TODO
 \end{proof}
 
 \begin{corolario}
@@ -531,7 +695,7 @@ Este es el resultado central de toda la exposición. El Teorema de Radon-Nikodym
 \end{ejemplo}
 
 \begin{observacion}
-    El Teorema de Radon-Nikodym no es válido en general sin la condición \(\sigma \)-finita. Sin embargo, existen generalizaciones para espacios de medida no-\(\sigma \)-finitos bajo hipótesis adicionales apropiadas.
+    El Teorema de Radon-Nikodym no es válido en general sin la condición \(\sigma \)-finita.
 \end{observacion}
 
 \newpage
